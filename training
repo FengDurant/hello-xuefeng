@@ -19,3 +19,19 @@ super = 2, ultra = 2
 super = 3, ultra = 3
 super = 4, ultra = 4
 super = 5, ultra = 5
+如：
+a_post = a++;   //后缀：使用a值之后，递增a
+b_pre = ++b;    //前缀：使用b值之前，递增b
+/*addemup.c  -- */
+#include <stdio.h>
+int mian(void) //计算前20整数的和
+{
+    int count, sum;
+
+    count = 0;
+    sum = 0;
+    while (count++ < 20)
+        sum = sum + count;
+    printf("sun = %d\n", sum);
+    return 0;
+}
