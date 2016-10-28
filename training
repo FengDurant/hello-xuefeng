@@ -391,3 +391,39 @@ int get_int(void)
 
 
 
+9.1.1创建并使用简单函数
+/* lethead1.c */
+#include <stdio.h>
+#define NAME "GIGATHINK, INC."
+#define ADDRESS "101 Megabuck Plaza"
+#define PLACE "Megapolis, CA 94904"
+#define WIDTH 40
+
+void starbar(void);  /* prototype the function */
+
+int main(void)
+{
+    starbar();
+    printf("%s\n", NAME);
+    printf("%s\n", ADDRESS);
+    printf("%s\n", PLACE);
+    starbar();       /* use the function       */
+
+    return 0;
+}
+
+void starbar(void)   /* define the function    */
+{
+    int count;
+
+    for (count = 1; count <= WIDTH; count++)
+        putchar('*');
+    putchar('\n');
+}
+在三处使用了starbar标识符：函数原型（function prototype）告诉编译器函数starbar（）的类型，函数调用（function call）表明在此处执行函数；函数定义
+（function denifition）指定函数要干什么。
+函数原型指明函数的返回值类型和函数接受参数类型。
+
+
+
+
