@@ -528,8 +528,34 @@ int main(void)
 
     return 0;
 }
-对数组而言，指针加 1 指的是增加一个存储单元，意味着加 1 后的地址是下一个元素的地址，而不是下一个字节的地址。
+对数组而言，指针加 1 指的是增加一个存储单元，意味着加 1 后的地址是下一个元素的地址，而不是下一个字节的地址。但是只知道地址是不够的，
+计算机需要知道存储对象需要多少字节。
 
+总结：
+    1.指针的值是他所指向对象的地址。地址的表达方式依赖于计算机内部硬件。许多计算机按照字节编址，意思是内存的每个字节按顺序编号。
+    2.在指针前面使用 * 运算符可以得到该指针所指对象的值。
+    3.指针加 1 ，指针的值递增他所指向类型的大小（以字节为单位）。
+    
+程序清单  10.9
+
+/* day_mon3.c -- uses pointer notation */
+#include <stdio.h>
+#define MONTHS 12
+
+int main(void)
+{
+    int days[MONTHS] = {31,28,31,30,31,30,31,31,30,31,30,31};
+    int months[MONTHS] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+    int index;
+
+    for (index = 0; index < MONTHS; index++)
+        printf("Month %2d has %d days.\n", *(months + index),
+               *(days + index));   // same as days[index]
+
+    return 0;
+}
+
+days是数组元素的首地址，days + index 是元素days[index]的z地址，而*(days + index)是该元素的值，相当于days[index]
 
 
 
