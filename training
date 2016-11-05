@@ -557,6 +557,81 @@ int main(void)
 
 days是数组元素的首地址，days + index 是元素days[index]的z地址，而*(days + index)是该元素的值，相当于days[index]
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+程序清单 10.10
+// sum_arr1.c -- sums the elements of an array
+// use %u or %lu if %zd doesn't work
+#include <stdio.h>
+#define SIZE 10
+int sum(int ar[], int n);
+//int sum(int * ar, int n);
+int main(void)
+{
+    int marbles[SIZE] = {20,10,5,39,4,16,19,26,31,20};
+    long answer;
+
+    answer = sum(marbles, SIZE);
+    printf("The total number of marbles is %ld.\n", answer);
+    printf("The size of marbles is %1u bytes.\n",
+           sizeof marbles);
+
+    return 0;
+}
+
+int sum(int ar[], int n)     // how big an array?
+{
+    int i;
+    int total = 0;
+
+    for( i = 0; i < n; i++)
+        total += ar[i];
+    printf("The size of ar is %1u bytes.\n", sizeof ar);
+
+    return total;
+}
+
+/* sum_arr2.c -- sums the elements of an array */
+#include <stdio.h>
+#define SIZE 10
+int sump(int * start, int * end);
+int main(void)
+{
+    int marbles[SIZE] = {20,10,5,39,4,16,19,26,31,20};
+    long answer;
+
+    answer = sump(marbles, marbles + SIZE);
+    printf("The total number of marbles is %ld.\n", answer);
+
+    return 0;
+}
+
+/* use pointer arithmetic   */
+int sump(int * start, int * end)
+{
+    int total = 0;
+
+    while (start < end)
+    {
+        total += *start; // add value to total
+        start++;         // advance pointer to next element
+        //total += *start++;
+    }
+
+    return total;
+}
+
+注意： 声明数组形参
+    因为数组名是该数组首元素的地址，作为实际参数的数组名t要求形式参数是一个与之匹配的指针。
+只有在这种条件下，C语言才会把 int ar[] 和 int * ar 解释成一样。也就是说，ar是指向int的
+指针。由于函数原型可以不要参数名，以下四种原型是等价的：
+    int sum(int * ar, int n);
+    int sum(int *, int );
+    int sum(int ar[], int n);
+    int sum(int [], int );
+    
+在函数定义中不可省略参数名。
+
 
 
 
