@@ -664,6 +664,191 @@ int main(void)
 printf()根据%s转换说明打印 We， 根据 %p 转换说明打印一个地址。因此“are”代表一个地址，printf（）打印该字符串首字符地址，*"space farers"表示该字符串
 所指向地址上存储的值。
 
+数组和指针
+程序清单 11.3 
+//  addresses.c  -- addresses of strings
+#define MSG "I'm special."
+
+#include <stdio.h>
+int main()
+{
+    char ar[] = MSG;
+    const char *pt = MSG;
+    printf("address of \"I'm special\": %p \n", "I'm special");
+    printf("              address ar: %p\n", ar);
+    printf("              address pt: %p\n", pt);
+    printf("          address of MSG: %p\n", MSG);
+    printf("address of \"I'm special\": %p \n", "I'm special");
+
+    return 0;
+}
+运行结果：
+address of "I'm special": 00403031
+              address ar: 0028FF0F
+              address pt: 00403024
+          address of MSG: 00403024
+address of "I'm special": 00403031
+
+    第一，pt与MSG地址相同，而ar的地址不同，
+    第二，字符串面量"I am special"在程序两个printf()出现两次，但编译器仅使用了一个存储位置、与MSG地址相同
+    第三，静态数据使用的内存与ar使用的动态内存不同，不仅值不同，特定编译器可能使用不同位数去表示。
+
+
+数组与指针的区别
+    初始化字符数组来存储字符串和初始化指针来指向字符串。
+
+程序 11.4
+//  arrchar.c -- array of pointers, array of strings
+#include <stdio.h>
+#define SLEN 40
+#define LIM 5
+int main(void)
+{
+    const char *mytalents[LIM] = {
+        "Adding numbers swiftly",
+        "Multiplying accurately", "Stashing data",
+        "Following instructions to the letter",
+        "Understanding the C language"
+    };
+    char yourtalents[LIM][SLEN] = {
+        "Walking in a straight line",
+        "Sleeping", "Watching television",
+        "Mailing letters", "Reading email"
+    };
+    int i;
+    
+    puts("Let's compare talents.");
+    printf ("%-36s  %-25s\n", "My Talents", "Your Talents");
+    for (i = 0; i < LIM; i++)
+        printf("%-36s  %-25s\n", mytalents[i], yourtalents[i]);
+    printf("\nsizeof mytalents: %zd, sizeof yourtalents: %zd\n",
+           sizeof(mytalents), sizeof(yourtalents));
+    
+    return 0;
+}
+运行结果：
+Let's compare talents.
+My Talents                            Your Talents
+Adding numbers swiftly                Walking in a straight line
+Multiplying accurately                Sleeping
+Stashing data                         Watching television
+Following instructions to the letter  Mailing letters
+Understanding the C language          Reading email
+
+sizeof mytalents: 40, sizeof yourtalents: 200
+Process returned 0 (0x0)   execution time : 0.035 s
+Press any key to continue.
+
+   mytalents和yourtalents非常相似。二者均代表五个字符串。使用一个下标时都分别代表字符串，如mytalents[0]和yourtalents[0];
+使用两个下标时表示一个字符。两者初始化方式相同。
+   区别：mytalents数组是一个内含五个指针的数组，占用40字节，而yourtalents是一个内含五个数组的数组，每个数组含有40个插入类型的值
+共200字节。mytalents中的指针指向初始化所用的字符串面量的位置，这些字符串面量被存储在静态内存中；而yourtalents中数组存储着初始化字符串面量
+的副本，所以每个字符串被存储了两次。
+
+
+11.1.2  指针和字符串
+   字符串的绝大部分操作通过指针完成。
+   程序清单 11.5 
+/* p_and_s.c -- pointers and strings */
+#include <stdio.h>
+int main(void)
+{
+    const char * mesg = "Don't be a fool!";
+    const char * copy;
+    
+    copy = mesg;
+    printf("%s\n", copy);
+    printf("mesg = %s; &mesg = %p; value = %p\n",
+           mesg, &mesg, mesg);
+    printf("copy = %s; &copy = %p; value = %p\n",
+           copy, &copy, copy);
+     
+    return 0;
+}
+
+   后两个printf()的输出，首先第一项，mesg和copy都已字符串形式输出(%s转换输出)。第二项，打印两个指针的地址，指针mesg和copy
+分别存储在不同的内存中，注意最后一项，所谓指针的值就是它存储的地址。mesg与copy值相同，说明指的是同一个地址。
+   通常，程序要完成某项操作只需知道地址即可。
+
+11.2 字符串输入
+ 11.2.1 分配空间
+     最简单的方法，在声明时指明数组大小；如 char[81]；
+     另一种使用C库函数分配内存。
+
+gets()函数的使用
+/*  getsputs.c  -- using gets() and puts() */
+#include <stdio.h>
+#define STLEN 81
+int main(void)
+{
+    char words[STLEN];
+     
+    puts("Enter a string, please.");
+    gets(words);  // typical use
+    printf("Your string twice:\n");
+    printf("%s\n", words);
+    puts(words);
+    puts("Done.");
+    
+    return 0;
+}
+    编译器在输出中插入一行警告信息，每次运行均会提醒，问题在gets()唯一的参数是words他无法检查是否装得下输入行。
+如果输入字符串过长，会导致缓冲区溢出，即多余的字符超出指定目标空间 。
+    一般不使用gets()函数。 
+
+11.2.3 fgetts()函数
+   fgets()函数通过第二个参数限制读入的字符数解决溢出问题，该函数专门设计用于处理文件输入。
+区别如下：
+    1.fgets()函数的第二个参数指明读入字符的个数，如果参数值是n，那么fgets函数将读入n-1个字符或者遇到第一个换行符。
+    2.fgets()读到一个换行符，会把它存储在字符串中。gets()会丢弃换行符。
+    3.fgets()函数的第三个参数指明要读入的文件。
+因为fgets()把换行符放在字符串的末尾通常与fputs()函数配对使用。
+
+程序清单 11.7
+/*  fgets1.c  -- using fgets() and fputs() */
+#include <stdio.h>
+#define STLEN 14
+int main(void)
+{
+    char words[STLEN];
+    
+    puts("Enter a string, please.");
+    fgets(words, STLEN, stdin);
+    printf("Your string twice (puts(), then fputs()):\n");
+    puts(words);
+    fputs(words, stdout);
+    puts("Enter another string, please.");
+    fgets(words, STLEN, stdin);
+    printf("Your string twice (puts(), then fputs()):\n");
+    puts(words);
+    fputs(words, stdout);
+    puts("Done.");
+    
+    return 0;
+}
+
+先输入：apple pie 再输入：strawberry shortcake
+
+第一行输入，比fgets()读入的整行短，因此，apple pie\n\0被存储在数组中。
+第二行输入，strawberry shortcake超出大小的限制。所以fgets()只读入13个字符。gets()函数会在字符串末尾添加换行符。但fgets()不会添加。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
