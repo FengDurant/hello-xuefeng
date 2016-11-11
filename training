@@ -833,22 +833,3 @@ int main(void)
 第二行输入，strawberry shortcake超出大小的限制。所以fgets()只读入13个字符。gets()函数会在字符串末尾添加换行符。但fgets()不会添加。
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
