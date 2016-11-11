@@ -633,6 +633,37 @@ int sump(int * start, int * end)
 在函数定义中不可省略参数名。
 
 
+第十一章  字符串和字符串函数
+  程序清单 11.1 
+  //  strings1.c
+#include <stdio.h>
+#define MSG "I am a symbolic string constant."
+#define MAXLENGTH 81
+int main(void)
+{
+    char words[MAXLENGTH] = "I am a string in an array.";
+    const char * pt1 = "Something is pointing at me.";
+    puts("Here are some strings:");
+    puts(MSG);
+    puts(words);
+    puts(pt1);
+    words[8] = 'p';
+    puts(words);
+
+    return 0;
+}
+程序清单 11.2
+/* strptr.c -- strings as pointers */
+#include <stdio.h>
+int main(void)
+{
+    printf("%s, %p, %c\n", "We", "are", *"space farers");
+    
+    return 0;
+}
+printf()根据%s转换说明打印 We， 根据 %p 转换说明打印一个地址。因此“are”代表一个地址，printf（）打印该字符串首字符地址，*"space farers"表示该字符串
+所指向地址上存储的值。
+
 
 
 
