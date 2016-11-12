@@ -832,4 +832,20 @@ int main(void)
 第一行输入，比fgets()读入的整行短，因此，apple pie\n\0被存储在数组中。
 第二行输入，strawberry shortcake超出大小的限制。所以fgets()只读入13个字符。gets()函数会在字符串末尾添加换行符。但fgets()不会添加。
 
+/*  fgets2.c  -- using fgets() and fputs() */
+#include <stdio.h>
+#define STLEN 10
+int main(void)
+{
+    char words[STLEN];
+    
+    puts("Enter strings (empty line to quit):");
+    while (fgets(words, STLEN, stdin) != NULL && words[0] != '\n')
+        fputs(words, stdout);
+    puts("Done.");
+    
+    return 0;
+}
+
+
 
