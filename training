@@ -847,5 +847,37 @@ int main(void)
     return 0;
 }
 
+/*  fgets3.c  -- using fgets() */
+#include <stdio.h>
+#define STLEN 10
+int main(void)
+{
+    char words[STLEN];
+    int i;
+    
+    puts("Enter strings (empty line to quit):");
+    while (fgets(words, STLEN, stdin) != NULL
+                          && words[0] != '\n')
+    {
+        i = 0;
+        while (words[i] != '\n' && words[i] != '\0')
+            i++;
+        if (words[i] == '\n')
+            words[i] = '\0';
+        else // must have words[i] == '\0'
+            while (getchar() != '\n')
+                continue;
+        puts(words);        
+    }
+    puts("done");
+    return 0;
+}
+
+空字符和空指针区别 ： 
+    上看，二者完全不同。空字符是用于标记C字符串末尾的字符，其对应字符编码为0.由于其他字符编码不可能是0，所以不可能是字符串的一部分。
+    空指针有一个值，该值不会与任何数据的有效地址对应。通常，函数使用它返回一个有效地址表示某些特殊情况发生，例如遇到文件文件结尾或未能按预期执行。
+
+
+
 
 
