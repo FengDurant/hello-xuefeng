@@ -878,6 +878,214 @@ int main(void)
     空指针有一个值，该值不会与任何数据的有效地址对应。通常，函数使用它返回一个有效地址表示某些特殊情况发生，例如遇到文件文件结尾或未能按预期执行。
 
 
+11.5字符串函数
+11.5.1 strlen() 函数
+/* test_fit.c -- try the string-shrinking function */
+#include <stdio.h>
+#include <string.h> /* contains string function prototypes */
+void fit(char *, unsigned int);
 
+int main(void)
+{
+    char mesg[] = "Things should be as simple as possible,"
+    " but not simpler.";
+    
+    puts(mesg);
+    fit(mesg,38);
+    puts(mesg);
+    puts("Let's look at some more of the string.");
+    puts(mesg + 39);
+    
+    return 0;
+}
+
+void fit(char *string, unsigned int size)
+{
+    if (strlen(string) > size)
+        string[size] = '\0';
+}
+put()函数显示字符串直到遇到 \0,才不显示。否则一直显示。
+
+11.5.2 strcat() 函数
+      strcat()用于拼接字符串，接受两个字符串作为参数。该函数把第二个字符串的备份加到第一个字符串末尾，并把第一个形成后的新字符串作为第一个字符串。
+第二个字符串不变，函数类型是 char * ,对地址进行操作。
+/* str_cat.c -- joins two strings */
+#include <stdio.h>
+#include <string.h>  /* declares the strcat() function */
+#define SIZE 80
+char * s_gets(char * st, int n);
+int main(void)
+{
+    char flower[SIZE];
+    char addon[] = "s smell like old shoes.";
+    
+    puts("What is your favorite flower?");
+    if (s_gets(flower, SIZE))
+    {
+        strcat(flower, addon);
+        puts(flower);
+        puts(addon);
+    }
+    else
+        puts("End of file encountered!");
+    puts("bye");
+
+
+    return 0;
+}
+
+
+char * s_gets(char * st, int n)
+{
+    char * ret_val;
+    int i = 0;
+    
+    ret_val = fgets(st, n, stdin);
+    if (ret_val)
+    {
+        while (st[i] != '\n' && st[i] != '\0')
+            i++;
+        if (st[i] == '\n')
+            st[i] = '\0';
+        else // must have words[i] == '\0'
+            while (getchar() != '\n')
+                continue;
+    }
+    return ret_val;
+}
+
+11.5.3 strncat()函数
+       strcat()函数无法检查第一个数组能否容乃第二个字符串。
+/* join_chk.c -- joins two strings, check size first */
+#include <stdio.h>
+#include <string.h>
+#define SIZE 30
+#define BUGSIZE 13
+char * s_gets(char * st, int n);
+int main(void)
+{
+    char flower[SIZE];
+    char addon[] = "s smell like old shoes.";
+    char bug[BUGSIZE];
+    int available;
+    
+    puts("What is your favorite flower?");
+    s_gets(flower, SIZE);
+    if ((strlen(addon) + strlen(flower) + 1) <= SIZE)
+        strcat(flower, addon);
+    puts(flower);
+    puts("What is your favorite bug?");
+    s_gets(bug, BUGSIZE);
+    available = BUGSIZE - strlen(bug) - 1;
+    strncat(bug, addon, available);
+    puts(bug);
+    
+    return 0;
+}
+char * s_gets(char * st, int n)
+{
+    char * ret_val;
+    int i = 0;
+    
+    ret_val = fgets(st, n, stdin);
+    if (ret_val)
+    {
+        while (st[i] != '\n' && st[i] != '\0')
+            i++;
+        if (st[i] == '\n')
+            st[i] = '\0';
+        else // must have words[i] == '\0'
+            while (getchar() != '\n')
+                continue;
+    }
+    return ret_val;
+}
+
+11.5.4
+假设把用户的响应与已存储的字符串作比较。
+/* nogo.c -- will this work? */
+#include <stdio.h>
+#define ANSWER "Grant"
+#define SIZE 40
+char * s_gets(char * st, int n);
+
+int main(void)
+{
+    char try[SIZE];
+    
+    puts("Who is buried in Grant's tomb?");
+    s_gets(try, SIZE);
+    while (try != ANSWER)
+    {
+        puts("No, that's wrong. Try again.");
+        s_gets(try, SIZE);
+    }
+    puts("That's right!");
+    
+    return 0;
+}
+
+char * s_gets(char * st, int n)
+{
+    char * ret_val;
+    int i = 0;
+    
+    ret_val = fgets(st, n, stdin);
+    if (ret_val)
+    {
+        while (st[i] != '\n' && st[i] != '\0')
+            i++;
+        if (st[i] == '\n')
+            st[i] = '\0';
+        else // must have words[i] == '\0'
+            while (getchar() != '\n')
+                continue;
+    }
+    return ret_val;
+}
+比较的是字符串的l内容，并不是字符串的地址。以上实例为错。
+/* compare.c -- this will work */
+#include <stdio.h>
+#include <string.h>   // declares strcmp()
+
+#define ANSWER "Grant"
+#define SIZE 40
+char * s_gets(char * st, int n);
+
+int main(void)
+{
+    char try[SIZE];
+    
+    puts("Who is buried in Grant's tomb?");
+    s_gets(try, SIZE);
+    while (strcmp(try,ANSWER) != 0)
+    {
+        puts("No, that's wrong. Try again.");
+        s_gets(try, SIZE);
+    }
+    puts("That's right!");
+        
+    return 0;
+}
+
+
+char * s_gets(char * st, int n)
+{
+    char * ret_val;
+    int i = 0;
+    
+    ret_val = fgets(st, n, stdin);
+    if (ret_val)
+    {
+        while (st[i] != '\n' && st[i] != '\0')
+            i++;
+        if (st[i] == '\n')
+            st[i] = '\0';
+        else // must have words[i] == '\0'
+            while (getchar() != '\n')
+                continue;
+    }
+    return ret_val;
+}
 
 
