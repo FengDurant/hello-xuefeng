@@ -1207,6 +1207,58 @@ char * s_gets(char * st, int n)
 
 可以使用指向字符串的指针排序。
 
+11.7 ctype.h字符函数和字符串
+     ctype.h的函数不能处理整个字符串，但可以处理字符串中的字符。
+     
+/* mod_str.c -- modifies a string */
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#define LIMIT 81
+void ToUpper(char *);
+int PunctCount(const char *);
+
+int main(void)
+{
+    char line[LIMIT];
+    char * find;
+    
+    puts("Please enter a line:");
+    fgets(line, LIMIT, stdin);
+    find = strchr(line, '\n');   // look for newline
+    if (find)                    // if the address is not NULL,
+        *find = '\0';            // place a null character there
+    ToUpper(line);
+    puts(line);
+    printf("That line has %d punctuation characters.\n",
+           PunctCount(line));
+    
+    return 0;
+}
+
+void ToUpper(char * str)
+{
+    while (*str)
+    {
+        *str = toupper(*str);
+        str++;
+    }
+}
+
+int PunctCount(const char * str)
+{
+    int ct = 0;
+    while (*str)
+    {
+        if (ispunct(*str))
+            ct++;
+        str++;
+    }
+    
+    return ct;
+}
+
+
 
 
 
