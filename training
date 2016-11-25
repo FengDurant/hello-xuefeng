@@ -1262,6 +1262,51 @@ int PunctCount(const char * str)
 
 
 
+第十二章  存储类别、链接和b内存管理
+
+      5种存储类别： 自动、寄存器、静态外部链接、静态内部链接、静态无链接。
+      
+程序清单12.1 
+// hiding.c -- variables in blocks
+#include <stdio.h>
+int main()
+{
+    int x = 30;      // original x
+    
+    printf("x in outer block: %d at %p\n", x, &x);
+    {
+        int x = 77;  // new x, hides first x
+        printf("x in inner block: %d at %p\n", x, &x);
+    }
+    printf("x in outer block: %d at %p\n", x, &x);
+    while (x++ < 33) // original x
+    {
+        int x = 100; // new x, hides first x 
+        x++;
+        printf("x in while loop: %d at %p\n", x, &x);
+    }
+    printf("x in outer block: %d at %p\n", x, &x);
+
+    return 0;
+}
+运行结果：
+首先，程序创建了变量x并初始化为30，如第一条printf()语句所示，然后，定义了新的变量x，并设置为77，如第2条printf()。根据显示地址可知，新变量
+隐藏了原始的x。第三条printf()语句位于第一个内存块后面，显示原始x的值。原始x没有消失，也没有改变。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
