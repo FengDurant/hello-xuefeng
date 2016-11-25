@@ -1293,6 +1293,32 @@ int main()
 首先，程序创建了变量x并初始化为30，如第一条printf()语句所示，然后，定义了新的变量x，并设置为77，如第2条printf()。根据显示地址可知，新变量
 隐藏了原始的x。第三条printf()语句位于第一个内存块后面，显示原始x的值。原始x没有消失，也没有改变。
 
+  没有花括号的块
+// forc99.c -- new C99 block rules
+#include <stdio.h>
+int main()
+{
+    int n = 8;
+    
+    printf("   Initially, n = %d at %p\n", n, &n);
+    for (int n = 1; n < 3; n++)
+        printf("      loop 1: n = %d at %p\n", n, &n);
+    printf("After loop 1, n = %d at %p\n", n, &n);
+    for (int n = 1; n < 3; n++)
+    {
+        printf(" loop 2 index n = %d at %p\n", n, &n);
+        int n = 6;
+        printf("      loop 2: n = %d at %p\n", n, &n);
+        n++;
+    }
+    printf("After loop 2, n = %d at %p\n", n, &n);
+    
+    return 0;
+}
+第一个for循环头中声明的n，其作用域至循环的末尾，而且隐藏了原始的n。但是，离开循环后，原始的n又起作用了。
+第二个for循环头中声明的n作为循环的索引，隐藏了原始的n、然后，在循环体又声明了一个n，隐藏了索引n。结束一轮f迭代后，声明在循环体的n消失，
+循环头使用的索引n进行测试。当循环结束时，原始的n又起作用了。
+
 
 
 
