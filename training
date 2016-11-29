@@ -1363,11 +1363,11 @@ int main(void)
     
     return 0;
 }
-
-
-
-
-
+malloc()函数的使用：
+        ptd = (double *) malloc(max * sizeof (double));创建动态数组；
+free()与malloc()函数一般配套使用：
+        free(ptd)；参数为malloc()分配的指针。
+  
 
 
 
