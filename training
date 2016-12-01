@@ -1385,12 +1385,38 @@ void gobble(double ar[], int n)
 }第一次调用gobble时，他创建指针temp，并调用malloc分配了1600字节的内存。但是遗漏了free()当函数结束时，作为自动变量的指针会消失，
 但指向的1600字节的内容依然存在。temp已经销毁，此块内存无法访问
   
+12.44存储类别和动态内存分配
+程序清单12.15
+//  where.c  -- where's the memory?
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-
-
-
-
-
-
-
+int static_store = 30;
+const char * pcg = "String Literal";
+int main()
+{
+    int auto_store = 40;
+    char auto_string[] = "Auto char Array";
+    int * pi;
+    char * pcl;
+    
+    pi = (int *) malloc(sizeof(int));
+    *pi = 35;
+    pcl = (char *) malloc(strlen("Dynamic String") + 1);
+    strcpy(pcl, "Dynamic String");
+    
+    printf("static_store: %d at %p\n", static_store, &static_store);
+    printf("  auto_store: %d at %p\n", auto_store, &auto_store);
+    printf("         *pi: %d at %p\n", *pi, pi);
+    printf("  %s at %p\n", pcg, pcg);
+    printf(" %s at %p\n", auto_string, auto_string);
+    printf("  %s at %p\n", pcl, pcl);
+    printf("   %s at %p\n", "Quoted String", "Quoted String");
+    free(pi);
+    free(pcl);
+    
+    return 0;
+}
+静态数据（包括字符串字面量）占用一个区域，自动数据占用一个区域。动态分配数据占用一个区域
