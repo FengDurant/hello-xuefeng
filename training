@@ -1839,3 +1839,14 @@ int main(void)
   him = &barney；
   或者fellow是一个结构数组，即fellow[0]是一个结构：
   him = &fellow[0];
+
+14.6.2 用指针访问成员
+有两种方法：
+    如果 him == &barney,那么him->incom 既是barney.income
+    如果 him == &fellow[0],那么him.income 既是 fellow[0].income
+  第二种方法：
+    如果him == &fellow[0]，那么 *him == fellow[0],因为*与&是一对互逆运算符。
+    fellow[0].incom == (*him).incom  ;  必须使用圆括号，因为.比*优先级更高。
+    
+   barney.income == (*him).income == him ->income  //假设him == &barney
+    
