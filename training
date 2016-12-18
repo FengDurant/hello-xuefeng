@@ -1921,4 +1921,7 @@ double sum(const struct funds * money)
 }
 sum（）函数指向funds结构的指针（money）作为他的参数。把地址&stan传递给函数，使得指针money指向结构Stan。然后通过->运算符获取stan.bankfund和
 stan.save的值。
+14.7.4 其它类型结构
+程序清单14.8
+
     
