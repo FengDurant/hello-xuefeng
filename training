@@ -1849,4 +1849,76 @@ int main(void)
     fellow[0].incom == (*him).incom  ;  必须使用圆括号，因为.比*优先级更高。
     
    barney.income == (*him).income == him ->income  //假设him == &barney
+   
+14.7.1 传递结构成员
+程序清单 14.5 
+/* funds1.c -- passing structure members as arguments */
+#include <stdio.h>
+#define FUNDLEN 50
+
+struct funds {
+    char   bank[FUNDLEN];
+    double bankfund;
+    char   save[FUNDLEN];
+    double savefund;
+};
+
+double sum(double, double);
+
+int main(void)
+{
+    struct funds stan = {
+        "Garlic-Melon Bank",
+        4032.27,
+        "Lucky's Savings and Loan",
+        8543.94
+    };
+    
+    printf("Stan has a total of $%.2f.\n",
+           sum(stan.bankfund, stan.savefund) );
+    return 0;
+}
+
+/* adds two double numbers */
+double sum(double x, double y)
+{
+    return(x + y);
+}
+当然如果在被调函数中修改主调函数中成员的值，就要传递成员的地址：
+modify(&stan.bankfund);
+
+14.7.2 传递结构的地址
+/* funds2.c -- passing a pointer to a structure */
+#include <stdio.h>
+#define FUNDLEN 50
+
+struct funds {
+    char   bank[FUNDLEN];
+    double bankfund;
+    char   save[FUNDLEN];
+    double savefund;
+};
+
+double sum(const struct funds *);  /* argument is a pointer */
+
+int main(void)
+{
+    struct funds stan = {
+        "Garlic-Melon Bank",
+        4032.27,
+        "Lucky's Savings and Loan",
+        8543.94
+    };
+    
+    printf("Stan has a total of $%.2f.\n", sum(&stan));
+    
+    return 0;
+}
+
+double sum(const struct funds * money)
+{
+    return(money->bankfund + money->savefund);
+}
+sum（）函数指向funds结构的指针（money）作为他的参数。把地址&stan传递给函数，使得指针money指向结构Stan。然后通过->运算符获取stan.bankfund和
+stan.save的值。
     
