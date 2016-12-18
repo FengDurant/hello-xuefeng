@@ -1831,4 +1831,11 @@ int main(void)
     
     return 0;
 }
-14.2.3
+
+14.6.1  声明和初始化结构指针
+  
+  struct guy * him;  关键字 struct，结构标记 guy， 最后是结构指针名。
+  该声明并未创建一个新的结构，如果barney是一个guy类型的结构变量，可以这样写：
+  him = &barney；
+  或者fellow是一个结构数组，即fellow[0]是一个结构：
+  him = &fellow[0];
