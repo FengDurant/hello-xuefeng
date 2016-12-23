@@ -2156,5 +2156,6 @@ char * s_gets(char * st, int n)
     return ret_val;
 }
 程序要点：以a+b模式打开。a+部分允许程序读取整个文件并在文件末尾添加内容，b是ANSI的一种标志方式，表明程序将使用二进制文件格式。
-fread()和Fwrite（）函数使用二进制文件。
-    
+fread()和Fwrite（）函数使用二进制文件。t
+   
+  
