@@ -2156,6 +2156,212 @@ char * s_gets(char * st, int n)
     return ret_val;
 }
 程序要点：以a+b模式打开。a+部分允许程序读取整个文件并在文件末尾添加内容，b是ANSI的一种标志方式，表明程序将使用二进制文件格式。
-fread()和Fwrite（）函数使用二进制文件。t
+fread()和Fwrite（）函数使用二进制文件。
+
+
+14.11.4  enum 的用法
+ 程序清单 14.15 
+ /* enum.c -- uses enumerated values */
+#include <stdio.h>
+#include <string.h>    // for strcmp(), strchr()
+#include <stdbool.h>   // C99 feature
+char * s_gets(char * st, int n);
+
+enum spectrum {red, orange, yellow, green, blue, violet};
+const char * colors[] = {"red", "orange", "yellow",
+    "green", "blue", "violet"};
+#define LEN 30
+
+int main(void)
+{
+    char choice[LEN];
+    enum spectrum color;
+    bool color_is_found = false;
+    
+    puts("Enter a color (empty line to quit):");
+    while (s_gets(choice, LEN) != NULL && choice[0] != '\0')
+    {
+        for (color = red; color <= violet; color++)
+        {
+            if (strcmp(choice, colors[color]) == 0)
+            {
+                color_is_found = true;
+                break;
+            }
+        }
+        if (color_is_found)
+            switch(color)
+        {
+            case red    : puts("Roses are red.");
+                break;
+            case orange : puts("Poppies are orange.");
+                break;
+            case yellow : puts("Sunflowers are yellow.");
+                break;
+            case green  : puts("Grass is green.");
+                break;
+            case blue   : puts("Bluebells are blue.");
+                break;
+            case violet : puts("Violets are violet.");
+                break;
+        }
+        else
+            printf("I don't know about the color %s.\n", choice);
+        color_is_found = false;
+        puts("Next color, please (empty line to quit):");
+    }
+    puts("Goodbye!");
+    
+    return 0;
+}
+
+char * s_gets(char * st, int n)
+{
+    char * ret_val;
+    char * find;
+    
+    ret_val = fgets(st, n, stdin);
+    if (ret_val)
+    {
+        find = strchr(st, '\n');   // look for newline
+        if (find)                  // if the address is not NULL,
+            *find = '\0';          // place a null character there
+        else
+            while (getchar() != '\n')
+                continue;          // dispose of rest of line
+    }
+    return ret_val;
+}
+
+14.14 函数和指针
+程序清单 14.16 
+// func_ptr.c -- uses function pointers
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#define LEN 81
+char * s_gets(char * st, int n);
+char showmenu(void);
+void eatline(void);     // read through end of line
+void show(void (* fp)(char *), char * str);
+void ToUpper(char *);   // convert string to uppercase
+void ToLower(char *);   // convert string to uppercase
+void Transpose(char *); // transpose cases
+void Dummy(char *);     // leave string unaltered
+
+int main(void)
+{
+    char line[LEN];
+    char copy[LEN];
+    char choice;
+    void (*pfun)(char *); // points a function having a
+    // char * argument and no
+    // return value
+    puts("Enter a string (empty line to quit):");
+    while (s_gets(line, LEN) != NULL && line[0] != '\0')
+    {
+        while ((choice = showmenu()) != 'n')
+        {
+            switch (choice   )  // switch sets pointer
+            {
+                case 'u' : pfun = ToUpper;   break;
+                case 'l' : pfun = ToLower;   break;
+                case 't' : pfun = Transpose; break;
+                case 'o' : pfun = Dummy;     break;
+            }
+            strcpy(copy, line);// make copy for show()
+            show(pfun, copy);  // use selected function
+        }
+        puts("Enter a string (empty line to quit):");
+    }
+    puts("Bye!");
+    
+    return 0;
+}
+
+char showmenu(void)
+{
+    char ans;
+    puts("Enter menu choice:");
+    puts("u) uppercase       l) lowercase");
+    puts("t) transposed case o) original case");
+    puts("n) next string");
+    ans = getchar();    // get response
+    ans = tolower(ans); // convert to lowercase
+    eatline();          // dispose of rest of line
+    while (strchr("ulton", ans) == NULL)
+    {
+        puts("Please enter a u, l, t, o, or n:");
+        ans = tolower(getchar());
+        eatline();
+    }
+    
+    return ans;
+}
+
+void eatline(void)
+{
+    while (getchar() != '\n')
+        continue;
+}
+
+void ToUpper(char * str)
+{
+    while (*str)
+    {
+        *str = toupper(*str);
+        str++;
+    }
+}
+
+void ToLower(char * str)
+{
+    while (*str)
+    {
+        *str = tolower(*str);
+        str++;
+    }
+}
+void Transpose(char * str)
+{
+    while (*str)
+    {
+        if (islower(*str))
+            *str = toupper(*str);
+        else if (isupper(*str))
+            *str = tolower(*str);
+        str++;
+    }
+}
+
+void Dummy(char * str)
+{
+    // leaves string unchanged
+}
+
+void show(void (* fp)(char *), char * str)
+{
+    (*fp)(str); // apply chosen function to str
+    puts(str);  // display result
+}
+
+char * s_gets(char * st, int n)
+{
+    char * ret_val;
+    char * find;
+    
+    ret_val = fgets(st, n, stdin);
+    if (ret_val)
+    {
+        find = strchr(st, '\n');   // look for newline
+        if (find)                  // if the address is not NULL,
+            *find = '\0';          // place a null character there
+        else
+            while (getchar() != '\n')
+                continue;          // dispose of rest of line
+    }
+    return ret_val;
+}
+
    
   
