@@ -2332,6 +2332,7 @@ void Transpose(char * str)
             *str = tolower(*str);
         str++;
     }
+    
 }
 
 void Dummy(char * str)
